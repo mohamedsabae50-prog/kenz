@@ -173,32 +173,38 @@ button:active {
 /* ==========================================
    أكواد الموبايل (أزرار اللمس والتجاوب)
    ========================================== */
+   /* ==========================================
+   أكواد الموبايل (أزرار اللمس والتجاوب)
+   ========================================== */
    
 .touch-controls {
     display: none; 
     position: absolute;
-    bottom: 60px; /* رفعنا الزراير لفوق عشان تبان بوضوح */
+    bottom: 30px; /* نزلناها لمكان مريح للصوابع */
     left: 0;
-    width: 100%;
-    padding: 0 40px;
-    justify-content: space-between;
-    z-index: 999; /* خليناهم فوق كل حاجة */
+    width: 100vw; /* تجبر الزراير تاخد عرض الشاشة كله */
+    padding: 0 40px; /* مسافة أمان من يمين وشمال الشاشة */
+    justify-content: space-between; /* بتزق الأسهم أقصى الشمال والأكشن أقصى اليمين */
+    align-items: center;
+    z-index: 999; 
     pointer-events: none; 
+    box-sizing: border-box;
 }
 
 .control-group {
     display: flex;
-    gap: 20px; /* وسعنا المسافة بين الزراير */
+    gap: 15px; /* مسافة بين الزرارين اللي جنب بعض */
+    pointer-events: none;
 }
 
 .touch-btn {
-    background: rgba(255, 64, 129, 0.4); /* خلينا اللون أغمق شوية عشان يبان */
+    background: rgba(255, 64, 129, 0.4); 
     border: 2px solid rgba(255, 255, 255, 0.6);
     color: white;
     width: 65px;
     height: 65px;
     border-radius: 50%;
-    font-size: 1.5rem;
+    font-size: 1.8rem; /* كبرنا الأيقونات جوه الزراير */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -208,7 +214,7 @@ button:active {
     touch-action: manipulation;
     backdrop-filter: blur(4px);
     padding: 0;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5); /* ضفنا ضل عشان الزراير تبرز */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5); 
 }
 
 .touch-btn:active {
@@ -216,11 +222,10 @@ button:active {
     transform: scale(0.9);
 }
 
-/* التجاوب مع شاشات الموبايل حتى لو عريضة */
+/* التجاوب مع شاشات الموبايل */
 @media (max-width: 1024px), (max-height: 600px) {
     .touch-controls {
         display: flex; 
-        bottom: 50px; /* مسافة أمان من شريط التليفون اللي تحت */
     }
     
     #hud {
