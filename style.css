@@ -18,7 +18,7 @@ body, html {
     top: 0;
     left: 0;
     width: 100vw; 
-    height: 100vh; 
+    height: 100dvh; /* التعديل هنا: dvh بدل vh */
     overflow: hidden;
 }
 
@@ -170,27 +170,31 @@ button:active {
    أكواد الموبايل (أزرار اللمس والتجاوب)
    ========================================== */
    
+/* ==========================================
+   أكواد الموبايل (أزرار اللمس والتجاوب)
+   ========================================== */
+   
 .touch-controls {
-    display: none; /* مخفية على اللاب توب */
+    display: none; 
     position: absolute;
-    bottom: 40px;
+    bottom: 60px; /* رفعنا الزراير لفوق عشان تبان بوضوح */
     left: 0;
     width: 100%;
-    padding: 0 30px;
+    padding: 0 40px;
     justify-content: space-between;
-    z-index: 15; 
+    z-index: 999; /* خليناهم فوق كل حاجة */
     pointer-events: none; 
 }
 
 .control-group {
     display: flex;
-    gap: 15px;
+    gap: 20px; /* وسعنا المسافة بين الزراير */
 }
 
 .touch-btn {
-    background: rgba(255, 64, 129, 0.2);
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 64, 129, 0.4); /* خلينا اللون أغمق شوية عشان يبان */
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    color: white;
     width: 65px;
     height: 65px;
     border-radius: 50%;
@@ -198,28 +202,25 @@ button:active {
     display: flex;
     justify-content: center;
     align-items: center;
-    pointer-events: auto; /* تفعيل اللمس على الزرار */
+    pointer-events: auto; 
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
     backdrop-filter: blur(4px);
     padding: 0;
-    box-shadow: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5); /* ضفنا ضل عشان الزراير تبرز */
 }
 
 .touch-btn:active {
-    background: rgba(255, 64, 129, 0.8);
+    background: rgba(255, 64, 129, 0.9);
     transform: scale(0.9);
-    color: white;
-    border-color: white;
 }
 
-/* التجاوب مع شاشات الموبايل */
-/* التجاوب مع شاشات الموبايل (حتى لو الشاشة عريضة جداً في وضع العرض) */
+/* التجاوب مع شاشات الموبايل حتى لو عريضة */
 @media (max-width: 1024px), (max-height: 600px) {
     .touch-controls {
-        display: flex; /* إظهار زراير اللمس */
-        bottom: 15px; /* رفعنا الزراير شوية عشان متستخباش تحت حافة الشاشة */
+        display: flex; 
+        bottom: 50px; /* مسافة أمان من شريط التليفون اللي تحت */
     }
     
     #hud {
@@ -254,6 +255,6 @@ button:active {
     }
     
     .controls-guide {
-        display: none; /* إخفاء نص إرشادات الكيبورد */
+        display: none; 
     }
 }
