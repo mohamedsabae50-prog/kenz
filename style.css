@@ -215,14 +215,16 @@ button:active {
 }
 
 /* التجاوب مع شاشات الموبايل */
-@media (max-width: 768px) {
+/* التجاوب مع شاشات الموبايل (حتى لو الشاشة عريضة جداً في وضع العرض) */
+@media (max-width: 1024px), (max-height: 600px) {
     .touch-controls {
         display: flex; /* إظهار زراير اللمس */
+        bottom: 15px; /* رفعنا الزراير شوية عشان متستخباش تحت حافة الشاشة */
     }
     
     #hud {
-        padding: 10px 15px;
-        font-size: 1rem;
+        padding: 5px 15px;
+        font-size: 0.9rem;
     }
     
     .stat span {
@@ -247,11 +249,11 @@ button:active {
     }
     
     button {
-        padding: 12px 30px;
-        font-size: 1.3rem;
+        padding: 10px 25px;
+        font-size: 1.2rem;
     }
     
     .controls-guide {
-        display: none; /* إخفاء نص (الأسهم والمسطرة) عشان إحنا على موبايل */
+        display: none; /* إخفاء نص إرشادات الكيبورد */
     }
 }
