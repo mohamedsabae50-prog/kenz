@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مغامرة كنزي السحرية</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-wrapper">
+        <div id="hud">
+            <div class="stat-group">
+                <div class="stat">المرحلة: <span id="levelDisplay">1</span></div>
+                <div class="stat">النقاط: <span id="scoreDisplay">0</span></div>
+            </div>
+            <div class="lives-container" id="livesContainer"></div>
+            <div class="stat-group">
+                <div class="stat">المستهدف: <span id="targetDisplay">5</span></div>
+                <div class="stat">الوقت: <span id="timeDisplay">30</span>ث</div>
+            </div>
+        </div>
+<canvas id="gameCanvas" width="1280" height="720"></canvas>
+        <div id="overlay" class="overlay">
+            <h1 id="overlayTitle">مغامرة كنزي السحرية</h1>
+            <p id="overlayText">اجمعي الفراولة مع صديقك القرد، اهربي من النحل والعناكب، واستخدمي الاندفاع للنجاة!</p>
+            <div class="stats-summary" id="statsSummary" style="display: none;">
+                <p>أعلى نقاط مسجلة: <span id="highScoreDisplay">0</span></p>
+            </div>
+            <button id="actionButton">ابدأ اللعب</button>
+            <div class="controls-guide">
+                <span>التحرك: الأسهم أو W, A, S, D</span>
+                <span>الاندفاع (Dash): المسطرة (Space)</span>
+                <span>إيقاف مؤقت: Esc أو P</span>
+            </div>
+        </div>
+        <div id="pauseOverlay" class="overlay hidden">
+            <h1>اللعبة متوقفة مؤقتاً</h1>
+            <button onclick="togglePause()">استئناف اللعب</button>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>

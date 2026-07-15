@@ -1,0 +1,168 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+}
+
+body, html {
+    background: linear-gradient(135deg, #160a2b, #30103a, #4a154b);
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* لمنع ظهور أي شريط تمرير */
+    /* تم إزالة الـ flex والـ centering عشان اللعبة تاخد المساحة كلها */
+}
+
+.game-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw; /* العرض ياخد الشاشة كلها */
+    height: 100vh; /* الطول ياخد الشاشة كلها */
+    overflow: hidden;
+    /* تم إزالة الحدود (borders) والظل (box-shadow) والـ border-radius */
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: #1a1025;
+}
+
+#hud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 800;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.stat-group {
+    display: flex;
+    gap: 20px;
+}
+
+.stat span {
+    color: #ff4081;
+    font-size: 1.5rem;
+}
+
+.lives-container {
+    display: flex;
+    gap: 8px;
+}
+
+.heart {
+    font-size: 1.8rem;
+    color: #ff3366;
+    filter: drop-shadow(0 0 5px #ff3366);
+    transition: transform 0.2s;
+}
+
+.heart.lost {
+    color: #444;
+    filter: none;
+    transform: scale(0.8);
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(22, 10, 43, 0.92);
+    backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    z-index: 20;
+}
+
+.overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(1.05);
+}
+
+#overlayTitle {
+    font-size: 4rem;
+    color: #ff4081;
+    margin-bottom: 15px;
+    text-shadow: 0 0 25px rgba(255, 64, 129, 0.7);
+    animation: pulse 2s infinite alternate;
+}
+
+#overlayText {
+    font-size: 1.3rem;
+    margin-bottom: 25px;
+    max-width: 600px;
+    line-height: 1.6;
+    color: #e0e0e0;
+}
+
+.stats-summary {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px 30px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stats-summary span {
+    color: #00e676;
+    font-weight: bold;
+}
+
+button {
+    background: linear-gradient(45deg, #ff4081, #9c27b0);
+    color: white;
+    border: none;
+    padding: 16px 48px;
+    font-size: 1.6rem;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(156, 39, 176, 0.5);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+button:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(156, 39, 176, 0.8);
+}
+
+button:active {
+    transform: translateY(-1px);
+}
+
+.controls-guide {
+    margin-top: 40px;
+    display: flex;
+    gap: 25px;
+    font-size: 1rem;
+    color: #aaa;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 20px;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.03); }
+}
