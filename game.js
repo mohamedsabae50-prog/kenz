@@ -189,12 +189,9 @@ function spawnPowerup(type) {
     if (type === 'shield') shieldItem = item;
     if (type === 'speed') speedItem = item;
 }
-function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas(); 
+// الكانفاس هتفضل دايماً بدقة ثابتة 1280x720 (زي ما هو معرّف في الـ HTML)
+// والـ CSS هو اللي هيتكفل بتكبيرها/تصغيرها بصرياً عشان تتناسب مع أي شاشة
+// من غير ما تتغير نسب اللاعب/القرد/المنصات بالنسبة للشاشة
 
 function checkCollision(r1, r2) { return r1.x < r2.x + r2.width && r1.x + r1.width > r2.x && r1.y < r2.y + r2.height && r1.y + r1.height > r2.y; }
 
