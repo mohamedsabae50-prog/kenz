@@ -27,12 +27,14 @@ const MAX_SPEED = 7;
 const DASH_SPEED = 24; 
 
 const images = {
-    player1: new Image(), player2: new Image(), monkey: new Image(), strawberry: new Image(),
+    player1: new Image(), player2: new Image(), player3: new Image(), monkey: new Image(), strawberry: new Image(),
     background: new Image(), banana: new Image(), worm: new Image(),
-    shield: new Image(), speed: new Image(), ground: new Image(), flag: new Image()
+    shield: new Image(), speed: new Image(), ground: new Image(), flag: new Image(),
+    heart: new Image()
 };
 
-images.player1.src = 'player1.png'; images.player2.src = 'player2.png'; images.monkey.src = 'monkey.png';
+images.heart.src = 'heart.png';
+images.player1.src = 'player1.png'; images.player2.src = 'player2.png'; images.player3.src = 'player3.png'; images.monkey.src = 'monkey.png';
 images.strawberry.src = 'strawberry.png'; images.background.src = 'background.png'; images.banana.src = 'banana.png';
 images.worm.src = 'worm.png'; images.shield.src = 'shield.png'; images.speed.src = 'speed.png';
 images.ground.src = 'ground.png'; images.flag.src = 'flag.png';
@@ -44,7 +46,7 @@ let monkey = { x: 50, y: 100, width: 45, height: 55, vx: 0, vy: 0, floatOffsetY:
 
 let platforms = []; let strawberries = []; let particles = []; let ambientParticles = []; let enemies = [];
 let waterZones = []; // قائمة المياه
-let banana = null; let shieldItem = null; let speedItem = null; let goal = null; 
+let banana = null; let shieldItem = null; let speedItem = null; let goal = null; let heartItem = null;
 let cameraX = 0; let cameraY = 0; let levelWidth = 2000; let levelDeathY = 2000;
 
 let audioCtx = null;
@@ -83,15 +85,24 @@ class AmbientParticle {
     draw(ctx) { ctx.globalAlpha = this.alpha; ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1; }
 }
 function initAmbient() { ambientParticles = []; for (let i = 0; i < 60; i++) ambientParticles.push(new AmbientParticle()); }
-function drawHearts() { livesContainer.innerHTML = ''; for (let i = 0; i < 3; i++) { const heart = document.createElement('span'); heart.className = i < lives ? 'heart' : 'heart lost'; heart.innerHTML = '❤️'; livesContainer.appendChild(heart); } }
-
+function drawHearts() { 
+    livesContainer.innerHTML = ''; 
+    let displayLives = Math.max(3, lives); // بيعرض 3 كحد أدنى، وبيزيد لو جمعت أكتر
+    for (let i = 0; i < displayLives; i++) { 
+        const heart = document.createElement('span'); 
+        heart.className = i < lives ? 'heart' : 'heart lost'; 
+        heart.innerHTML = '❤️'; 
+        livesContainer.appendChild(heart); 
+    } 
+}
 function spawnLevel() {
     platforms = []; strawberries = []; enemies = []; waterZones = [];
     banana = null; shieldItem = null; speedItem = null; goal = null;
     collectedStrawberries = 0;
     requiredStrawberries = Math.min(4 + level, 11);
     
-    currentPlayerImage = Math.random() > 0.5 ? images.player1 : images.player2;
+    const playerChoices = [images.player1, images.player2, images.player3];
+    currentPlayerImage = playerChoices[Math.floor(Math.random() * playerChoices.length)];
     const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
     
     let desiredLength = 2000 + (level * 1000) + (Math.random() * 500); 
@@ -162,7 +173,14 @@ function spawnLevel() {
         enemies.push({ type: 'worm', x: plat.x + plat.width / 2, y: plat.y - 35, vx: (Math.random() > 0.5 ? 1 : -1) * (1.8 + level * 0.3), vy: 0, width: 60, height: 35, pulse: Math.random() * Math.PI, facing: 1, plat: plat });
         wormPool.splice(randomIndex, 1);
     }
-
+// توليد قلب لزيادة الأرواح
+    if (lives < 3 || Math.random() > 0.5) {
+        let availablePlats = safePlatforms.filter(p => !p.hasStrawberry); 
+        if (availablePlats.length > 0) {
+            let plat = availablePlats[Math.floor(Math.random() * availablePlats.length)];
+            heartItem = { x: plat.x + plat.width / 2 - 15, y: plat.y - 50, width: 30, height: 30, pulse: 0 };
+        }
+    }
     if (ui.target) ui.target.innerText = `0/${requiredStrawberries}`;
     levelDeathY = -Infinity;
     platforms.forEach(p => { if (p.y > levelDeathY) levelDeathY = p.y; });
@@ -316,7 +334,16 @@ function update(deltaTime) {
     if (banana && checkCollision(player, banana)) { for (let p = 0; p < 20; p++) particles.push(new Particle(banana.x + 17, banana.y + 17, '#ffd700')); banana = null; monkey.isSuper = true; monkey.superTimer = 6000; playSound('powerup'); }
     if (shieldItem && checkCollision(player, shieldItem)) { for (let p = 0; p < 20; p++) particles.push(new Particle(shieldItem.x + 20, shieldItem.y + 20, '#00bcd4')); player.hasShield = true; shieldItem = null; playSound('powerup'); }
     if (speedItem && checkCollision(player, speedItem)) { for (let p = 0; p < 20; p++) particles.push(new Particle(speedItem.x + 20, speedItem.y + 20, '#ff9800')); player.speedBoostTimer = 6000; speedItem = null; playSound('powerup'); }
-
+if (heartItem) {
+        heartItem.pulse += deltaTime * 0.01; 
+        if (checkCollision(player, heartItem)) { 
+            for (let p = 0; p < 20; p++) particles.push(new Particle(heartItem.x + 15, heartItem.y + 15, '#ff3366')); 
+            lives++; 
+            drawHearts(); 
+            heartItem = null; 
+            playSound('powerup'); 
+        }
+    }
     enemies.forEach(e => {
         e.pulse += deltaTime * 0.015; e.x += e.vx;
         if (e.x < e.plat.x || e.x + e.width > e.plat.x + e.plat.width) { e.vx *= -1; e.x += e.vx; } 
@@ -401,7 +428,19 @@ function draw() {
     if (banana) { let scale = 1 + Math.sin(banana.pulse) * 0.1; ctx.save(); ctx.translate(banana.x + banana.width / 2, banana.y + banana.height / 2); ctx.scale(scale, scale); if (images.banana.complete && images.banana.naturalWidth > 0) ctx.drawImage(images.banana, -banana.width / 2, -banana.height / 2, banana.width, banana.height); else drawBananaFallback(-banana.width / 2, -banana.height / 2, banana.width, banana.height); ctx.restore(); }
     if (shieldItem) { let scale = 1 + Math.sin(shieldItem.pulse) * 0.1; ctx.save(); ctx.translate(shieldItem.x + shieldItem.width / 2, shieldItem.y + shieldItem.height / 2); ctx.scale(scale, scale); ctx.shadowColor = '#00bcd4'; ctx.shadowBlur = 15; if (images.shield.complete && images.shield.naturalWidth > 0) ctx.drawImage(images.shield, -shieldItem.width / 2, -shieldItem.height / 2, shieldItem.width, shieldItem.height); else drawShieldFallback(-shieldItem.width / 2, -shieldItem.height / 2, shieldItem.width, shieldItem.height); ctx.restore(); }
     if (speedItem) { let scale = 1 + Math.sin(speedItem.pulse) * 0.1; ctx.save(); ctx.translate(speedItem.x + speedItem.width / 2, speedItem.y + speedItem.height / 2); ctx.scale(scale, scale); ctx.shadowColor = '#ff9800'; ctx.shadowBlur = 15; if (images.speed.complete && images.speed.naturalWidth > 0) ctx.drawImage(images.speed, -speedItem.width / 2, -speedItem.height / 2, speedItem.width, speedItem.height); else drawSpeedFallback(-speedItem.width / 2, -speedItem.height / 2, speedItem.width, speedItem.height); ctx.restore(); }
-
+if (heartItem) { 
+        let scale = 1 + Math.sin(heartItem.pulse) * 0.1; 
+        ctx.save(); 
+        ctx.translate(heartItem.x + heartItem.width / 2, heartItem.y + heartItem.height / 2); 
+        ctx.scale(scale, scale); 
+        ctx.shadowColor = '#ff3366'; ctx.shadowBlur = 15; 
+        if (images.heart.complete && images.heart.naturalWidth > 0) {
+            ctx.drawImage(images.heart, -heartItem.width / 2, -heartItem.height / 2, heartItem.width, heartItem.height); 
+        } else { 
+            ctx.fillStyle = '#ff3366'; ctx.beginPath(); ctx.arc(0, 0, heartItem.width / 2, 0, Math.PI * 2); ctx.fill(); 
+        }
+        ctx.restore(); 
+    }
     enemies.forEach(e => { ctx.save(); ctx.translate(e.x + e.width / 2, e.y + e.height / 2); ctx.scale(e.facing, 1); let wriggleY = Math.sin(e.pulse) * 4; if (images.worm.complete && images.worm.naturalWidth > 0) ctx.drawImage(images.worm, -e.width / 2, -e.height / 2 + wriggleY, e.width, e.height); else drawWormFallback(-e.width / 2, -e.height / 2 + wriggleY, e.width, e.height, e.pulse); ctx.restore(); });
 
     particles.forEach(p => p.draw(ctx));
