@@ -10,18 +10,16 @@ body, html {
     background: linear-gradient(135deg, #160a2b, #30103a, #4a154b);
     width: 100%;
     height: 100%;
-    overflow: hidden; /* لمنع ظهور أي شريط تمرير */
-    /* تم إزالة الـ flex والـ centering عشان اللعبة تاخد المساحة كلها */
+    overflow: hidden; 
 }
 
 .game-wrapper {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100vw; /* العرض ياخد الشاشة كلها */
-    height: 100vh; /* الطول ياخد الشاشة كلها */
+    width: 100vw; 
+    height: 100vh; 
     overflow: hidden;
-    /* تم إزالة الحدود (borders) والظل (box-shadow) والـ border-radius */
 }
 
 canvas {
@@ -29,6 +27,7 @@ canvas {
     width: 100%;
     height: 100%;
     background-color: #1a1025;
+    object-fit: contain; /* عشان يحافظ على أبعاد اللعبة جوه الموبايل وميتمطش */
 }
 
 #hud {
@@ -165,4 +164,94 @@ button:active {
 @keyframes pulse {
     0% { transform: scale(1); }
     100% { transform: scale(1.03); }
+}
+
+/* ==========================================
+   أكواد الموبايل (أزرار اللمس والتجاوب)
+   ========================================== */
+   
+.touch-controls {
+    display: none; /* مخفية على اللاب توب */
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+    width: 100%;
+    padding: 0 30px;
+    justify-content: space-between;
+    z-index: 15; 
+    pointer-events: none; 
+}
+
+.control-group {
+    display: flex;
+    gap: 15px;
+}
+
+.touch-btn {
+    background: rgba(255, 64, 129, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.8);
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: auto; /* تفعيل اللمس على الزرار */
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    backdrop-filter: blur(4px);
+    padding: 0;
+    box-shadow: none;
+}
+
+.touch-btn:active {
+    background: rgba(255, 64, 129, 0.8);
+    transform: scale(0.9);
+    color: white;
+    border-color: white;
+}
+
+/* التجاوب مع شاشات الموبايل */
+@media (max-width: 768px) {
+    .touch-controls {
+        display: flex; /* إظهار زراير اللمس */
+    }
+    
+    #hud {
+        padding: 10px 15px;
+        font-size: 1rem;
+    }
+    
+    .stat span {
+        font-size: 1.1rem;
+    }
+    
+    .stat-group {
+        gap: 10px;
+    }
+    
+    .heart {
+        font-size: 1.2rem;
+    }
+    
+    #overlayTitle {
+        font-size: 2.5rem;
+    }
+    
+    #overlayText {
+        font-size: 1rem;
+        padding: 0 15px;
+    }
+    
+    button {
+        padding: 12px 30px;
+        font-size: 1.3rem;
+    }
+    
+    .controls-guide {
+        display: none; /* إخفاء نص (الأسهم والمسطرة) عشان إحنا على موبايل */
+    }
 }
