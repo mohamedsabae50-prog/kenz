@@ -18,9 +18,12 @@ body, html {
    ========================================== */
 
 .game-wrapper {
-    position: relative;
+    position: fixed; /* fixed بدل relative عشان نتجنب باگ السكرول بار مع شريط الـ URL */
+    top: 0;
+    left: 0;
     width: 100vw;
     height: 100vh;
+    height: 100dvh; /* يحل باگ الـ vh الديناميكي على متصفحات الموبايل */
     overflow: hidden;
     background: #000;
 }
@@ -33,6 +36,30 @@ body, html {
     width: 100%;
     height: 100%;
     object-fit: contain; /* يحافظ على نسبة 16:9 من غير ما يتشوه اللاعب أو القرد */
+}
+
+/* رسالة تدوير الجهاز - تظهر بس لو الموبايل في وضع Portrait */
+.rotate-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: linear-gradient(135deg, #160a2b, #30103a, #4a154b);
+    color: white;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 1.4rem;
+    padding: 20px;
+}
+
+@media (orientation: portrait) and (max-width: 900px) {
+    .rotate-overlay {
+        display: flex;
+    }
+    #hud, #gameCanvas, .touch-controls, .overlay {
+        display: none !important;
+    }
 }
 
 @media (max-width: 1024px), (max-height: 600px) {
